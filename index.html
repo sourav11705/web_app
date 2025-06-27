@@ -156,6 +156,11 @@
             margin-right: auto;
         }
     </style>
+
+    <!-- Google AdSense Code (Place this here, as high as possible in the <head>) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7621618027309121"
+     crossorigin="anonymous"></script>
+
 </head>
 <body>
     <div class="container">
@@ -176,6 +181,18 @@
         <!-- Text-to-Speech Section -->
         <div id="ttsSection" class="tab-content active">
             <h2 class="text-2xl font-semibold text-gray-700 mb-4">Text-to-Speech Converter</h2>
+
+            <!-- Example Ad Placement: Below the heading in TTS section -->
+            <div class="my-4 text-center">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-7621618027309121"
+                     data-ad-slot="YOUR_AD_UNIT_SLOT_ID"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+            <!-- End Example Ad Placement -->
 
             <div class="flex flex-col">
                 <label for="textInput" class="text-gray-700 font-medium mb-2">Enter Text:</label>
@@ -344,7 +361,7 @@
         // --- Global DOM Element References (for all sections) ---
         const messageBox = document.getElementById('messageBox');
         const errorBox = document.getElementById('errorBox');
-        // IMPORTANT: Replace with your actual Render.com app URL
+        // IMPORTANT: Replace 'YOUR_RENDER_APP_URL' with the actual URL of your deployed Render app
         const API_BASE_URL = 'https://ai-web-toolkit-app.onrender.com'; 
 
         // --- Navigation Elements ---
@@ -468,7 +485,7 @@
                 const response = await fetch(`${API_BASE_URL}/voices`);
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({})); // Try to parse JSON even on error
-                    throw new Error(`HTTP error! status: ${response.status} - ${errorData.details || response.statusText || 'Unknown error'}`);
+                    throw new Error(`HTTP error! status: ${response.status} - ${errorData.details || response.statusText}`);
                 }
                 const voices = await response.json();
                 populateVoiceList(voices);
@@ -534,7 +551,7 @@
 
                 if (!response.ok) {
                     const errorBody = await response.json().catch(() => ({}));
-                    throw new Error(`HTTP error! status: ${response.status} - ${errorBody.details || response.statusText || 'Unknown error'}`);
+                    throw new Error(`HTTP error! status: ${response.status} - ${errorBody.details || response.statusText}`);
                 }
 
                 if (action === 'play') {
@@ -611,7 +628,7 @@
 
                 if (!response.ok) {
                     const errorBody = await response.json().catch(() => ({}));
-                    throw new Error(`HTTP error! status: ${response.status} - ${errorBody.details || response.statusText || 'Unknown error'}`);
+                    throw new Error(`HTTP error! status: ${response.status} - ${errorBody.details || response.statusText}`);
                 }
 
                 const result = await response.json();
@@ -697,7 +714,7 @@
 
                 if (!response.ok) {
                     const errorBody = await response.json().catch(() => ({}));
-                    throw new Error(`HTTP error! status: ${response.status} - ${errorBody.details || response.statusText || 'Unknown error'}`);
+                    throw new Error(`HTTP error! status: ${response.status} - ${errorBody.details || response.statusText}`);
                 }
 
                 const result = await response.json();
@@ -777,7 +794,7 @@
 
                 if (!response.ok) {
                     const errorBody = await response.json().catch(() => ({}));
-                    throw new Error(`HTTP error! status: ${response.status} - ${errorBody.details || response.statusText || 'Unknown error'}`);
+                    throw new Error(`HTTP error! status: ${response.status} - ${errorBody.details || response.statusText}`);
                 }
 
                 const result = await response.json();
