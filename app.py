@@ -395,6 +395,6 @@ def generate_cover():
 if __name__ == '__main__':
     # Render provides the PORT environment variable.
     # We need to bind to 0.0.0.0 to be accessible externally.
-    port = int(os.environ.get("PORT", 4000))
+    port = int(os.environ.get("PORT", 5000))
     print(f"DEBUG: Running Flask app on port {port}", file=sys.stderr) # Added sys.stderr
     app.run(host='0.0.0.0', port=port)
