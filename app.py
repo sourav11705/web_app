@@ -18,11 +18,12 @@ CORS(app) # Enable CORS for all routes
 
 # Murf AI API Key (for Text-to-Speech)
 # Replace "YOUR_MURF_AI_API_KEY" with your actual Murf AI API Key.
-MURF_API_KEY = os.environ.get("MURF_API_KEY", "YOUR_MURF_AI_API_KEY_FALLBACK") 
+MURF_API_KEY = os.environ.get("MURF_API_KEY", "YOUR_MURF_AI_API_KEY_FOR_LOCAL_TESTING")
 
 # Gemini API Key (for Text Humanization and Book Writing)
 # Get your Gemini API key from Google AI Studio (https://aistudio.google.com/app/apikey)
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "YOUR_GEMINI_API_KEY_FOR_LOCAL_TESTING")
+
 # --- Initialize API Clients/URLs ---
 # Initialize the Murf client
 client = Murf(api_key=MURF_API_KEY)
