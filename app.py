@@ -1,4 +1,5 @@
 # app.py
+import sys # Explicitly import sys at the very top
 from flask import Flask, request, send_file, jsonify
 from flask_cors import CORS
 from murf import Murf # Import the Murf SDK
@@ -7,7 +8,6 @@ import requests # Still needed to download the audio from Murf's URL
 import json # Used for handling JSON responses from LLM API
 import base64 # For encoding/decoding images
 import os # Import os to read environment variables
-import sys
 
 app = Flask(__name__, static_folder='.', static_url_path='') # Serve static files from current directory
 CORS(app) # Enable CORS for all routes
@@ -29,7 +29,7 @@ POLLINATIONS_IMAGE_API_BASE_URL = "https://image.pollinations.ai/prompt/"
 # Added try-except for Murf client initialization
 try:
     client = Murf(api_key=MURF_API_KEY)
-    print(f"DEBUG: Murf client initialized successfully. API Key (first 5 chars): {MURF_API_KEY[:5]}...")
+    print(f"DEBUG: Murf client initialized successfully. API Key (first 5 chars): {MURF_API_KEY[:5]}...", file=sys.stderr) # Added sys.stderr here too
 except Exception as e:
     print(f"ERROR: Failed to initialize Murf client: {e}", file=sys.stderr)
     client = None # Set client to None if initialization fails
@@ -38,8 +38,8 @@ except Exception as e:
 GEMINI_TEXT_API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
 
 # --- Debugging: Print API Keys at startup (for Render logs) ---
-print(f"DEBUG: App starting. MURF_API_KEY (first 5 chars): {MURF_API_KEY[:5]}...")
-print(f"DEBUG: GEMINI_API_KEY (first 5 chars): {GEMINI_API_KEY[:5]}...")
+print(f"DEBUG: App starting. MURF_API_KEY (first 5 chars): {MURF_API_KEY[:5]}...", file=sys.stderr) # Added sys.stderr
+print(f"DEBUG: GEMINI_API_KEY (first 5 chars): {GEMINI_API_KEY[:5]}...", file=sys.stderr) # Added sys.stderr
 
 
 @app.route('/')
@@ -56,7 +56,7 @@ def get_voices():
     to find the exact 'voice_id's that are available and
     active for your account, and update this list accordingly.
     """
-    print("DEBUG: Received request for /voices endpoint.")
+    print("DEBUG: Received request for /voices endpoint.", file=sys.stderr) # Added sys.stderr
     if client is None:
         print("ERROR: Murf client is not initialized. Cannot fetch voices.", file=sys.stderr)
         return jsonify({"error": "Murf AI client not initialized. Check API key."}), 500
@@ -88,7 +88,7 @@ def get_voices():
         
         # Sort voices for better display in the frontend
         voices_list.sort(key=lambda v: (v['locale'], v['name']))
-        print("DEBUG: Successfully prepared voices list.")
+        print("DEBUG: Successfully prepared voices list.", file=sys.stderr) # Added sys.stderr
         return jsonify(voices_list)
     except Exception as e:
         print(f"ERROR: Exception in get_voices: {e}", file=sys.stderr)
@@ -102,7 +102,7 @@ def synthesize_speech():
     Returns:
         Audio content (MP3) or JSON error.
     """
-    print("DEBUG: Received request for /synthesize endpoint.")
+    print("DEBUG: Received request for /synthesize endpoint.", file=sys.stderr) # Added sys.stderr
     if client is None:
         print("ERROR: Murf client is not initialized. Cannot synthesize speech.", file=sys.stderr)
         return jsonify({"error": "Murf AI client not initialized. Check API key."}), 500
@@ -134,7 +134,7 @@ def synthesize_speech():
         # Ensure rate stays within Murf's expected range [-50, 50]
         murf_rate = max(-50, min(50, murf_rate))
 
-        print(f"DEBUG: Calling Murf AI generate with text length {len(text)}, voice_id={voice_id}, pitch={murf_pitch}, rate={murf_rate}")
+        print(f"DEBUG: Calling Murf AI generate with text length {len(text)}, voice_id={voice_id}, pitch={murf_pitch}, rate={murf_rate}", file=sys.stderr) # Added sys.stderr
         # Call Murf AI API using the SDK
         response = client.text_to_speech.generate(
             text=text,
@@ -151,7 +151,7 @@ def synthesize_speech():
             print("ERROR: Murf AI did not return an audio file URL.", file=sys.stderr)
             raise Exception("Murf AI did not return an audio file URL.")
 
-        print(f"DEBUG: Murf AI returned audio URL: {audio_url}")
+        print(f"DEBUG: Murf AI returned audio URL: {audio_url}", file=sys.stderr) # Added sys.stderr
         # Download the audio content from the URL
         audio_response = requests.get(audio_url, stream=True)
         audio_response.raise_for_status() # Raise an exception for HTTP errors during download
@@ -159,7 +159,7 @@ def synthesize_speech():
         audio_buffer = io.BytesIO(audio_response.content)
 
         if action == 'download':
-            print("DEBUG: Sending audio for download.")
+            print("DEBUG: Sending audio for download.", file=sys.stderr) # Added sys.stderr
             return send_file(
                 audio_buffer,
                 mimetype='audio/mpeg',
@@ -167,7 +167,7 @@ def synthesize_speech():
                 download_name='converted_audio.mp3'
             )
         else: # Default to 'play' action
-            print("DEBUG: Sending audio for playback.")
+            print("DEBUG: Sending audio for playback.", file=sys.stderr) # Added sys.stderr
             return audio_buffer.getvalue(), 200, {'Content-Type': 'audio/mpeg'}
 
     except Exception as e:
@@ -179,7 +179,7 @@ def humanize_text():
     """
     Takes text from the user and humanizes it using the Gemini API.
     """
-    print("DEBUG: Received request for /humanize_text endpoint.")
+    print("DEBUG: Received request for /humanize_text endpoint.", file=sys.stderr) # Added sys.stderr
     try:
         data = request.json
         text_to_humanize = data.get('text')
@@ -210,7 +210,7 @@ def humanize_text():
 
         if result.get('candidates') and result['candidates'][0].get('content') and result['candidates'][0]['content'].get('parts'):
             humanized_text = result['candidates'][0]['content']['parts'][0]['text']
-            print("DEBUG: Successfully humanized text.", file=sys.stderr)
+            print("DEBUG: Successfully humanized text.", file=sys.stderr) # Added sys.stderr
             return jsonify({"humanizedText": humanized_text})
         else:
             print(f"ERROR: Gemini API response for humanize format unexpected or missing content: {result}", file=sys.stderr)
@@ -232,7 +232,7 @@ def generate_book():
     Generates a book with chapters based on topic/title, type, and word/chapter limits.
     This uses an iterative approach as single large requests are not feasible.
     """
-    print("DEBUG: Received request for /generate_book endpoint.")
+    print("DEBUG: Received request for /generate_book endpoint.", file=sys.stderr) # Added sys.stderr
     try:
         data = request.json
         topic = data.get('topic')
@@ -246,7 +246,7 @@ def generate_book():
         
         if word_limit > 50000: # Enforce the 50,000 word limit
             word_limit = 50000
-            print("DEBUG: Word limit adjusted to max 50,000 words.", file=sys.stderr)
+            print("DEBUG: Word limit adjusted to max 50,000 words.", file=sys.stderr) # Added sys.stderr
         
         if num_chapters <= 0:
             print("ERROR: Number of chapters must be at least 1.", file=sys.stderr)
@@ -264,7 +264,7 @@ def generate_book():
         chat_history = [{"role": "user", "parts": [{"text": outline_prompt}]}]
         payload = {"contents": chat_history}
         
-        print("DEBUG: Requesting book outline from Gemini API.", file=sys.stderr)
+        print("DEBUG: Requesting book outline from Gemini API.", file=sys.stderr) # Added sys.stderr
         outline_response = requests.post(
             GEMINI_TEXT_API_URL,
             headers={'Content-Type': 'application/json'},
@@ -281,7 +281,7 @@ def generate_book():
             outline_text = outline_result['candidates'][0]['content']['parts'][0]['text']
             book_content.append(f"# {topic}\n\n## Outline\n{outline_text}\n\n")
             current_word_count += len(outline_text.split())
-            print("DEBUG: Successfully generated book outline.", file=sys.stderr)
+            print("DEBUG: Successfully generated book outline.", file=sys.stderr) # Added sys.stderr
         else:
             print(f"ERROR: Gemini API response for outline format unexpected or missing content: {outline_result}", file=sys.stderr)
             raise Exception("Gemini API response for outline format unexpected or missing content.")
@@ -298,23 +298,23 @@ def generate_book():
                     chapters.append(chapter_title)
         
         if len(chapters) != num_chapters:
-            print(f"WARNING: Parsed {len(chapters)} chapters, but {num_chapters} were requested. Adjusting.", file=sys.stderr)
+            print(f"WARNING: Parsed {len(chapters)} chapters, but {num_chapters} were requested. Adjusting.", file=sys.stderr) # Added sys.stderr
             while len(chapters) < num_chapters:
                 chapters.append(f"Chapter {len(chapters) + 1}")
             chapters = chapters[:num_chapters]
-        print(f"DEBUG: Prepared {len(chapters)} chapters for generation.", file=sys.stderr)
+        print(f"DEBUG: Prepared {len(chapters)} chapters for generation.", file=sys.stderr) # Added sys.stderr
 
         # --- Step 2: Generate Content for Each Chapter Iteratively ---
         words_per_chapter_target = (word_limit - current_word_count) // len(chapters) if len(chapters) > 0 else (word_limit - current_word_count)
         
         for i, chapter_title in enumerate(chapters):
             if current_word_count >= word_limit:
-                print("DEBUG: Word limit reached, stopping chapter generation.", file=sys.stderr)
+                print("DEBUG: Word limit reached, stopping chapter generation.", file=sys.stderr) # Added sys.stderr
                 break
             
             max_words_for_this_chapter = min(words_per_chapter_target, word_limit - current_word_count) 
             if max_words_for_this_chapter <= 0:
-                print("DEBUG: No words left for current chapter, stopping.", file=sys.stderr)
+                print("DEBUG: No words left for current chapter, stopping.", file=sys.stderr) # Added sys.stderr
                 break
 
             chapter_prompt = (
@@ -326,7 +326,7 @@ def generate_book():
             chat_history = [{"role": "user", "parts": [{"text": chapter_prompt}]}]
             payload = {"contents": chat_history}
 
-            print(f"DEBUG: Requesting content for chapter '{chapter_title}' from Gemini API.", file=sys.stderr)
+            print(f"DEBUG: Requesting content for chapter '{chapter_title}' from Gemini API.", file=sys.stderr) # Added sys.stderr
             chapter_response = requests.post(
                 GEMINI_TEXT_API_URL,
                 headers={'Content-Type': 'application/json'},
@@ -344,14 +344,14 @@ def generate_book():
                 chapter_text = chapter_result['candidates'][0]['content']['parts'][0]['text']
                 book_content.append(f"\n\n## {chapter_title}\n\n{chapter_text}\n")
                 current_word_count += len(chapter_text.split())
-                print(f"DEBUG: Generated content for chapter '{chapter_title}'. Current word count: {current_word_count}", file=sys.stderr)
+                print(f"DEBUG: Generated content for chapter '{chapter_title}'. Current word count: {current_word_count}", file=sys.stderr) # Added sys.stderr
             else:
                 book_content.append(f"\n\n## {chapter_title}\n\n(Failed to generate content for this chapter.)\n")
-                print(f"WARNING: Failed to generate content for chapter '{chapter_title}'. Response: {chapter_result}", file=sys.stderr)
+                print(f"WARNING: Failed to generate content for chapter '{chapter_title}'. Response: {chapter_result}", file=sys.stderr) # Added sys.stderr
         
         final_book_text = "".join(book_content)
         final_word_count = len(final_book_text.split())
-        print(f"DEBUG: Book generation complete. Final word count: {final_word_count}", file=sys.stderr)
+        print(f"DEBUG: Book generation complete. Final word count: {final_word_count}", file=sys.stderr) # Added sys.stderr
         return jsonify({"bookContent": final_book_text, "wordCount": final_word_count})
 
     except requests.exceptions.RequestException as e:
@@ -370,20 +370,20 @@ def generate_cover():
     Generates a book cover image based on prompt using Pollinations.AI.
     Returns the image URL directly.
     """
-    print("DEBUG: Received request for /generate_cover endpoint.")
+    print("DEBUG: Received request for /generate_cover endpoint.", file=sys.stderr) # Added sys.stderr
     try:
         data = request.json
         prompt_text = data.get('prompt')
 
         if not prompt_text:
-            print("ERROR: Prompt for cover generation is required.", file=sys.stderr)
+            print("ERROR: Prompt for cover generation is required.", file=sys.stderr) # Added sys.stderr
             return jsonify({"error": "Prompt for cover generation is required"}), 400
 
         from urllib.parse import quote_plus
         encoded_prompt = quote_plus(prompt_text)
         image_url = f"{POLLINATIONS_IMAGE_API_BASE_URL}{encoded_prompt}"
         
-        print(f"DEBUG: Pollinations.AI image URL generated: {image_url}", file=sys.stderr)
+        print(f"DEBUG: Pollinations.AI image URL generated: {image_url}", file=sys.stderr) # Added sys.stderr
         # Pollinations.AI returns the image directly, so we just return the URL to the frontend.
         # The frontend will then display this URL.
         return jsonify({"imageUrl": image_url})
@@ -396,5 +396,5 @@ if __name__ == '__main__':
     # Render provides the PORT environment variable.
     # We need to bind to 0.0.0.0 to be accessible externally.
     port = int(os.environ.get("PORT", 5000))
-    print(f"DEBUG: Running Flask app on port {port}", file=sys.stderr)
+    print(f"DEBUG: Running Flask app on port {port}", file=sys.stderr) # Added sys.stderr
     app.run(host='0.0.0.0', port=port)
