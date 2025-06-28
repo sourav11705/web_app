@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Powered Web Toolkit - AI Book Writer</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .header-nav {
+            background-color: #1a202c;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .header-nav a {
+            color: #e2e8f0;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .header-nav a:hover {
+            background-color: #2d3748;
+            color: #ffffff;
+        }
+        .header-nav a.active {
+            background-color: #6366f1;
+            color: white;
+        }
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 2rem;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://placehold.co/1200x600/D9A0B9/FFFFFF?text=AI+Book+Writer+Background'); /* Placeholder image */
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.6);
+            z-index: -1;
+        }
+        .hero-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .hero-description {
+            font-size: 1.2rem;
+            max-width: 800px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 32px;
+            width: 100%;
+            max-width: 700px;
+            margin: -80px auto 20px auto;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        input[type="text"], input[type="number"], select, textarea {
+            border: 1px solid #d1d5db;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #374151;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+        button {
+            background-color: #6366f1;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 12px;
+            border-radius: 8px;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        button:hover {
+            background-color: #4f46e5;
+            transform: translateY(-1px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .message-box, .error-box {
+            background-color: #ffeeba;
+            border: 1px solid #ffde7b;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+        .error-box {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .output-box {
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            min-height: 100px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #374151;
+            font-size: 1rem;
+            line-height: 1.5;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+        .loading-indicator {
+            display: none;
+            text-align: center;
+            color: #6b7280;
+            font-medium: 1.125rem;
+            margin-top: 1rem;
+        }
+        @media (max-width: 768px) {
+            .header-nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .header-nav a {
+                width: 100%;
+                text-align: center;
+            }
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            .hero-description {
+                font-size: 1rem;
+            }
+            .container {
+                margin: -40px auto 20px auto;
+                padding: 20px;
+            }
+        }
+    </style>
+    <!-- Google AdSense Code -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7621618027309121"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+    <header class="header-nav">
+        <div class="text-2xl font-bold text-white">AI Toolkit</div>
+        <nav class="flex space-x-4 flex-wrap justify-center">
+            <a href="index.html">Home</a>
+            <a href="tts.html">Text-to-Speech</a>
+            <a href="humanizer.html">Text Humanizer</a>
+            <a href="book_writer.html" class="active">AI Book Writer</a>
+            <a href="cover_generator.html">AI Book Cover</a>
+            <a href="feedback.html">Feedback</a>
+        </nav>
+    </header>
+
+    <div class="hero-section">
+        <h1 class="hero-title">AI Book Writer</h1>
+        <p class="hero-description">
+            Unleash your inner author! Generate full-length books, chapter by chapter, on any topic. Customize the book type, number of chapters, and word limit to craft your perfect masterpiece.
+        </p>
+    </div>
+
+    <main class="container">
+        <!-- Message/Error Boxes -->
+        <div id="messageBox" class="message-box"></div>
+        <div id="errorBox" class="error-box"></div>
+
+        <!-- AdSense Ad Unit (Example Placement) -->
+        <div class="my-4 text-center">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-7621618027309121"
+                 data-ad-slot="YOUR_AD_UNIT_SLOT_ID_BOOK_WRITER"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <div class="flex flex-col">
+            <label for="bookTopicInput" class="text-gray-700 font-medium mb-2">Book Topic or Title:</label>
+            <input type="text" id="bookTopicInput" placeholder="e.g., The Future of AI in Daily Life" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+        </div>
+
+        <div class="flex flex-col">
+            <label for="bookTypeSelect" class="text-gray-700 font-medium mb-2">Type of Book:</label>
+            <select id="bookTypeSelect" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                <option value="novel">Novel</option>
+                <option value="non-fiction book">Non-Fiction Book</option>
+                <option value="biography">Biography</option>
+                <option value="encyclopedia entry">Encyclopedia Entry</option>
+                <option value="technical guide">Technical Guide</option>
+                <option value="fantasy story">Fantasy Story</option>
+                <option value="science fiction story">Science Fiction Story</option>
+                <option value="children's story">Children's Story</option>
+                <option value="historical fiction">Historical Fiction</option>
+                <option value="thriller">Thriller</option>
+                <option value="educational textbook">Educational Textbook</option>
+            </select>
+        </div>
+
+        <div class="flex flex-col">
+            <label for="numChaptersInput" class="text-gray-700 font-medium mb-2">Number of Chapters (1-10):</label>
+            <input type="number" id="numChaptersInput" min="1" max="10" value="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+        </div>
+
+        <div class="flex flex-col">
+            <label for="wordLimitInput" class="text-gray-700 font-medium mb-2">Desired Total Word Limit (max 50,000):</label>
+            <input type="number" id="wordLimitInput" min="500" max="50000" value="5000" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+            <p class="text-sm text-gray-500 mt-1">Note: Actual length may vary. Longer books take significantly more time.</p>
+        </div>
+
+        <button id="generateBookButton" class="w-full py-3 px-4 text-lg bg-purple-600 hover:bg-purple-700 focus:ring-purple-500">
+            Generate Book
+        </button>
+        <button id="downloadBookButton" class="w-full py-3 px-4 text-lg bg-teal-600 hover:bg-teal-700 focus:ring-teal-500 mt-2">
+            Download Book (.txt)
+        </button>
+
+        <!-- Loading Indicator for Book Writer -->
+        <div id="bookWriterLoadingIndicator" class="loading-indicator">
+            <svg class="animate-spin h-5 w-5 mr-3 inline-block text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span id="bookWriterLoadingMessage">Generating book outline...</span>
+        </div>
+
+        <div class="flex flex-col">
+            <label for="bookOutput" class="text-gray-700 font-medium mb-2">Generated Book Content:</label>
+            <div id="bookOutput" class="output-box"></div>
+        </div>
+    </main>
+
+    <script>
+        const API_BASE_URL = 'YOUR_RENDER_APP_URL'; // IMPORTANT: Replace with your actual Render.com app URL
+        const messageBox = document.getElementById('messageBox');
+        const errorBox = document.getElementById('errorBox');
+        const bookTopicInput = document.getElementById('bookTopicInput');
+        const bookTypeSelect = document.getElementById('bookTypeSelect'); 
+        const numChaptersInput = document.getElementById('numChaptersInput'); 
+        const wordLimitInput = document.getElementById('wordLimitInput');
+        const generateBookButton = document.getElementById('generateBookButton');
+        const downloadBookButton = document.getElementById('downloadBookButton');
+        const bookOutput = document.getElementById('bookOutput');
+        const bookWriterLoadingIndicator = document.getElementById('bookWriterLoadingIndicator');
+        const bookWriterLoadingMessageSpan = document.getElementById('bookWriterLoadingMessage');
+
+        let generatedBookContent = "";
+
+        function showMessage(msg, type = 'info') {
+            const targetBox = type === 'error' ? errorBox : messageBox;
+            const otherBox = type === 'error' ? messageBox : errorBox;
+
+            targetBox.textContent = msg;
+            targetBox.style.display = 'block';
+            otherBox.style.display = 'none';
+
+            setTimeout(() => {
+                targetBox.style.display = 'none';
+            }, 5000);
+        }
+
+        function setBookWriterLoading(isLoading, message = 'Processing...') {
+            if (isLoading) {
+                bookWriterLoadingIndicator.classList.remove('hidden');
+                bookWriterLoadingMessageSpan.textContent = message;
+                generateBookButton.disabled = true;
+                downloadBookButton.disabled = true;
+                bookTopicInput.disabled = true;
+                bookTypeSelect.disabled = true; 
+                numChaptersInput.disabled = true; 
+                wordLimitInput.disabled = true;
+                bookOutput.textContent = '';
+                generatedBookContent = "";
+            } else {
+                bookWriterLoadingIndicator.classList.add('hidden');
+                generateBookButton.disabled = false;
+                downloadBookButton.disabled = (generatedBookContent === "");
+                bookTopicInput.disabled = false;
+                bookTypeSelect.disabled = false; 
+                numChaptersInput.disabled = false; 
+                wordLimitInput.disabled = false;
+            }
+        }
+
+        async function generateBook() {
+            const topic = bookTopicInput.value.trim();
+            const wordLimit = parseInt(wordLimitInput.value, 10);
+            const numChapters = parseInt(numChaptersInput.value, 10); 
+            const bookType = bookTypeSelect.value; 
+
+            if (!topic) {
+                showMessage('Please enter a book topic or title.', 'warning');
+                return;
+            }
+            if (isNaN(wordLimit) || wordLimit <= 0) {
+                showMessage('Please enter a valid word limit (min 500).', 'warning');
+                return;
+            }
+            if (wordLimit > 50000) {
+                showMessage('Word limit cannot exceed 50,000 words. Adjusting to 50,000.', 'warning');
+                wordLimitInput.value = 50000;
+            }
+            if (isNaN(numChapters) || numChapters < 1 || numChapters > 10) { 
+                showMessage('Please enter a valid number of chapters between 1 and 10.', 'warning');
+                return;
+            }
+
+            setBookWriterLoading(true, 'Generating book outline and content...');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/generate_book`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        topic: topic,
+                        word_limit: wordLimit,
+                        num_chapters: numChapters,
+                        book_type: bookType
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorBody = await response.json().catch(() => ({}));
+                    throw new Error(`HTTP error! status: ${response.status} - ${errorBody.details || response.statusText || 'Unknown error'}`);
+                }
+
+                const result = await response.json();
+                if (result.bookContent) {
+                    generatedBookContent = result.bookContent;
+                    bookOutput.textContent = generatedBookContent;
+                    showMessage(`Book generated successfully! Total words: ${result.wordCount}`, 'info');
+                } else {
+                    showMessage('Book generation failed: No content returned.', 'error');
+                }
+
+            } catch (error) {
+                console.error('Book generation request failed:', error);
+                showMessage(`Error: ${error.message}. Book generation can take time and might be limited by AI model capabilities.`, 'error');
+            } finally {
+                setBookWriterLoading(false);
+            }
+        }
+
+        function downloadBook() {
+            if (generatedBookContent) {
+                const blob = new Blob([generatedBookContent], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${bookTopicInput.value.trim().replace(/[^a-z0-9\s]/gi, '').substring(0, 50).trim() || 'generated_book'}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                showMessage('Book downloaded successfully!', 'info');
+            } else {
+                showMessage('No book content to download.', 'warning');
+            }
+        }
+
+        // Event Listeners
+        generateBookButton.addEventListener('click', generateBook);
+        downloadBookButton.addEventListener('click', downloadBook);
+    </script>
+</body>
+</html>

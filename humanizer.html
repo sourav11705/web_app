@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Powered Web Toolkit - Text Humanizer</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .header-nav {
+            background-color: #1a202c;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .header-nav a {
+            color: #e2e8f0;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .header-nav a:hover {
+            background-color: #2d3748;
+            color: #ffffff;
+        }
+        .header-nav a.active {
+            background-color: #6366f1;
+            color: white;
+        }
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 2rem;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://placehold.co/1200x600/C0D9A0/FFFFFF?text=Text+Humanizer+Background'); /* Placeholder image */
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.6);
+            z-index: -1;
+        }
+        .hero-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .hero-description {
+            font-size: 1.2rem;
+            max-width: 800px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 32px;
+            width: 100%;
+            max-width: 700px;
+            margin: -80px auto 20px auto;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        button {
+            background-color: #6366f1;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 12px;
+            border-radius: 8px;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        button:hover {
+            background-color: #4f46e5;
+            transform: translateY(-1px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .message-box, .error-box {
+            background-color: #ffeeba;
+            border: 1px solid #ffde7b;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+        .error-box {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .output-box {
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px;
+            min-height: 100px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #374151;
+            font-size: 1rem;
+            line-height: 1.5;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+        .loading-indicator {
+            display: none;
+            text-align: center;
+            color: #6b7280;
+            font-medium: 1.125rem;
+            margin-top: 1rem;
+        }
+        @media (max-width: 768px) {
+            .header-nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .header-nav a {
+                width: 100%;
+                text-align: center;
+            }
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            .hero-description {
+                font-size: 1rem;
+            }
+            .container {
+                margin: -40px auto 20px auto;
+                padding: 20px;
+            }
+        }
+    </style>
+    <!-- Google AdSense Code -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7621618027309121"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+    <header class="header-nav">
+        <div class="text-2xl font-bold text-white">AI Toolkit</div>
+        <nav class="flex space-x-4 flex-wrap justify-center">
+            <a href="index.html">Home</a>
+            <a href="tts.html">Text-to-Speech</a>
+            <a href="humanizer.html" class="active">Text Humanizer</a>
+            <a href="book_writer.html">AI Book Writer</a>
+            <a href="cover_generator.html">AI Book Cover</a>
+            <a href="feedback.html">Feedback</a>
+        </nav>
+    </header>
+
+    <div class="hero-section">
+        <h1 class="hero-title">AI Text Humanizer</h1>
+        <p class="hero-description">
+            Transform your AI-generated or stiff text into naturally flowing, human-like prose. Enhance readability, engagement, and authenticity for any audience or purpose.
+        </p>
+    </div>
+
+    <main class="container">
+        <!-- Message/Error Boxes -->
+        <div id="messageBox" class="message-box"></div>
+        <div id="errorBox" class="error-box"></div>
+
+        <!-- AdSense Ad Unit (Example Placement) -->
+        <div class="my-4 text-center">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-7621618027309121"
+                 data-ad-slot="YOUR_AD_UNIT_SLOT_ID_HUMANIZER"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <div class="flex flex-col">
+            <label for="humanizerTextInput" class="text-gray-700 font-medium mb-2">Enter Text to Humanize:</label>
+            <textarea id="humanizerTextInput" placeholder="Paste your AI-generated or stiff text here to make it sound 100% human." class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"></textarea>
+        </div>
+
+        <button id="humanizeButton" class="w-full py-3 px-4 text-lg bg-indigo-500 hover:bg-indigo-600 focus:ring-indigo-500">
+            Humanize Text
+        </button>
+
+        <!-- Loading Indicator for Humanizer -->
+        <div id="humanizerLoadingIndicator" class="loading-indicator">
+            <svg class="animate-spin h-5 w-5 mr-3 inline-block text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span id="humanizerLoadingMessage">Humanizing your text...</span>
+        </div>
+
+        <div class="flex flex-col">
+            <label for="humanizedOutput" class="text-gray-700 font-medium mb-2">Humanized Output:</label>
+            <div id="humanizedOutput" class="output-box"></div>
+        </div>
+    </main>
+
+    <script>
+        const API_BASE_URL = 'YOUR_RENDER_APP_URL'; // IMPORTANT: Replace with your actual Render.com app URL
+        const messageBox = document.getElementById('messageBox');
+        const errorBox = document.getElementById('errorBox');
+        const humanizerTextInput = document.getElementById('humanizerTextInput');
+        const humanizeButton = document.getElementById('humanizeButton');
+        const humanizedOutput = document.getElementById('humanizedOutput');
+        const humanizerLoadingIndicator = document.getElementById('humanizerLoadingIndicator');
+        const humanizerLoadingMessageSpan = document.getElementById('humanizerLoadingMessage');
+
+        function showMessage(msg, type = 'info') {
+            const targetBox = type === 'error' ? errorBox : messageBox;
+            const otherBox = type === 'error' ? messageBox : errorBox;
+
+            targetBox.textContent = msg;
+            targetBox.style.display = 'block';
+            otherBox.style.display = 'none';
+
+            setTimeout(() => {
+                targetBox.style.display = 'none';
+            }, 5000);
+        }
+
+        function setHumanizerLoading(isLoading, message = 'Processing...') {
+            if (isLoading) {
+                humanizerLoadingIndicator.classList.remove('hidden');
+                humanizerLoadingMessageSpan.textContent = message;
+                humanizeButton.disabled = true;
+                humanizerTextInput.disabled = true;
+                humanizedOutput.textContent = '';
+            } else {
+                humanizerLoadingIndicator.classList.add('hidden');
+                humanizeButton.disabled = false;
+                humanizerTextInput.disabled = false;
+            }
+        }
+
+        async function humanizeText() {
+            const textToHumanize = humanizerTextInput.value.trim();
+
+            if (textToHumanize === '') {
+                showMessage('Please enter some text to humanize.', 'warning');
+                return;
+            }
+
+            setHumanizerLoading(true, 'Humanizing your text...');
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/humanize_text`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        text: textToHumanize
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorBody = await response.json().catch(() => ({}));
+                    throw new Error(`HTTP error! status: ${response.status} - ${errorBody.details || response.statusText || 'Unknown error'}`);
+                }
+
+                const result = await response.json();
+                if (result.humanizedText) {
+                    humanizedOutput.textContent = result.humanizedText;
+                    showMessage('Text humanized successfully!', 'info');
+                } else {
+                    showMessage('Humanization failed: No text returned.', 'error');
+                }
+
+            } catch (error) {
+                console.error('Humanization request failed:', error);
+                showMessage(`Error: ${error.message}. Check console for details.`, 'error');
+            } finally {
+                setHumanizerLoading(false);
+            }
+        }
+
+        // Event Listeners
+        humanizeButton.addEventListener('click', humanizeText);
+    </script>
+</body>
+</html>
