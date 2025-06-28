@@ -8,6 +8,7 @@ import requests
 import json
 import base64
 import os
+# Removed smtplib, ssl, email.mime.text imports as email integration is removed
 
 app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)
@@ -16,6 +17,7 @@ CORS(app)
 MURF_API_KEY = os.environ.get("MURF_API_KEY", "YOUR_MURF_AI_API_KEY_FOR_LOCAL_TESTING")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "YOUR_GEMINI_API_KEY_FOR_LOCAL_TESTING")
 
+# Pollinations.AI URL for Book Cover Generation - No API Key needed for this service
 POLLINATIONS_IMAGE_API_BASE_URL = "https://image.pollinations.ai/prompt/"
 
 # --- Initialize API Clients/URLs ---
@@ -34,10 +36,10 @@ print(f"DEBUG: GEMINI_API_KEY (first 5 chars): {GEMINI_API_KEY[:5]}...", file=sy
 
 @app.route('/')
 def serve_index():
-    """Serves the index.html (or home.html) file."""
-    return send_file('index.html') # Assuming index.html is now the main landing page
+    """Serves the index.html (main landing page) file."""
+    return send_file('index.html')
 
-# Serve other HTML files for each tab
+# Serve other HTML files for each feature and feedback
 @app.route('/tts.html')
 def serve_tts():
     return send_file('tts.html')
@@ -55,7 +57,7 @@ def serve_cover_generator():
     return send_file('cover_generator.html')
 
 @app.route('/feedback.html')
-def serve_feedback_page(): # Renamed to avoid conflict with endpoint
+def serve_feedback():
     return send_file('feedback.html')
 
 
@@ -79,7 +81,7 @@ def get_voices():
             {"name": "Arohi (Indian English, Female, Conversational)", "id": "en-IN-arohi", "gender": "Female", "locale": "en-IN", "voice_type": "Conversational"},
             {"name": "Rohan (Indian English, Male, Conversational)", "id": "en-IN-rohan", "gender": "Male", "locale": "en-IN", "voice_type": "Conversational"},
             {"name": "Alia (Indian English, Female, Promo)", "id": "en-IN-alia", "gender": "Female", "locale": "en-IN", "voice_type": "Promo"},
-            # Removed Surya as requested
+            # Surya voice remains removed as per previous request
             {"name": "Priya (Indian English, Female, Conversational)", "id": "en-IN-priya", "gender": "Female", "locale": "en-IN", "voice_type": "Conversational"},
             {"name": "Shivani (Indian English, Female, Conversational)", "id": "en-IN-shivani", "gender": "Female", "locale": "en-IN", "voice_type": "Conversational"},
             {"name": "Isha (Indian English, Female, Conversational)", "id": "en-IN-isha", "gender": "Female", "locale": "en-IN", "voice_type": "Conversational"},
@@ -372,32 +374,7 @@ def generate_cover():
         print(f"ERROR: Unexpected error during cover generation with Pollinations.AI: {e}", file=sys.stderr)
         return jsonify({"error": "An unexpected error occurred during cover generation", "details": str(e)}), 500
 
-@app.route('/send_feedback', methods=['POST'])
-def send_feedback():
-    """
-    Receives feedback from the frontend and acknowledges its receipt.
-    (Email integration removed as per user request).
-    """
-    print("DEBUG: Received request for /send_feedback endpoint.", file=sys.stderr)
-    try:
-        data = request.json
-        name = data.get('name', 'Anonymous')
-        email = data.get('email', 'No Email Provided')
-        subject = data.get('subject', 'General Feedback')
-        message_body = data.get('message', 'No message body provided.')
-
-        if not message_body:
-            return jsonify({"error": "Message body is required for feedback."}), 400
-
-        # Log the feedback for debugging/record-keeping on the server side
-        print(f"INFO: Received Feedback -- Name: {name}, Email: {email}, Subject: {subject}, Message: {message_body}", file=sys.stderr)
-        
-        return jsonify({"message": "Thank you for your feedback! It has been received."}), 200
-
-    except Exception as e:
-        print(f"ERROR: Failed to process feedback: {e}", file=sys.stderr)
-        return jsonify({"error": "Failed to receive feedback. Please try again later.", "details": str(e)}), 500
-
+# Removed the /send_feedback endpoint and related functions
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
