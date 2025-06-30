@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Powered Web Toolkit - Feedback</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .header-nav {
+            background-color: #1a202c;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .header-nav a {
+            color: #e2e8f0;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .header-nav a:hover {
+            background-color: #2d3748;
+            color: #ffffff;
+        }
+        .header-nav a.active {
+            background-color: #6366f1;
+            color: white;
+        }
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 2rem;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://placehold.co/1200x600/A0D9D9/FFFFFF?text=Feedback+Background'); /* Placeholder image */
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.6);
+            z-index: -1;
+        }
+        .hero-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .hero-description {
+            font-size: 1.2rem;
+            max-width: 800px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 32px;
+            width: 100%;
+            max-width: 700px;
+            margin: -80px auto 20px auto;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        input[type="text"], input[type="email"], textarea {
+            border: 1px solid #d1d5db;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #374151;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input[type="text"]:focus, input[type="email"]:focus, textarea:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+        button {
+            background-color: #6366f1;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 12px;
+            border-radius: 8px;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        button:hover {
+            background-color: #4f46e5;
+            transform: translateY(-1px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .message-box, .error-box {
+            background-color: #ffeeba;
+            border: 1px solid #ffde7b;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+        }
+        .error-box {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .loading-indicator {
+            display: none;
+            text-align: center;
+            color: #6b7280;
+            font-medium: 1.125rem;
+            margin-top: 1rem;
+        }
+        @media (max-width: 768px) {
+            .header-nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .header-nav a {
+                width: 100%;
+                text-align: center;
+            }
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            .hero-description {
+                font-size: 1rem;
+            }
+            .container {
+                margin: -40px auto 20px auto;
+                padding: 20px;
+            }
+        }
+    </style>
+    <!-- Google AdSense Code -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7621618027309121"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+    <header class="header-nav">
+        <div class="text-2xl font-bold text-white">AI Toolkit</div>
+        <nav class="flex space-x-4 flex-wrap justify-center">
+            <a href="index.html">Home</a>
+            <a href="tts.html">Text-to-Speech</a>
+            <a href="humanizer.html">Text Humanizer</a>
+            <a href="book_writer.html">AI Book Writer</a>
+            <a href="cover_generator.html">AI Book Cover</a>
+            <a href="feedback.html" class="active">Feedback</a>
+        </nav>
+    </header>
+
+    <div class="hero-section">
+        <h1 class="hero-title">Feedback Portal</h1>
+        <p class="hero-description">
+            Your insights help us grow! Share your feedback, suggestions, or report any issues you encounter. We're committed to making this toolkit even better for you.
+        </p>
+    </div>
+
+    <main class="container">
+        <!-- Message/Error Boxes -->
+        <div id="messageBox" class="message-box"></div>
+        <div id="errorBox" class="error-box"></div>
+
+        <!-- AdSense Ad Unit (Example Placement) -->
+        <div class="my-4 text-center">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-7621618027309121"
+                 data-ad-slot="YOUR_AD_UNIT_SLOT_ID_FEEDBACK"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <form id="feedbackForm" class="flex flex-col gap-4">
+            <div>
+                <label for="name" class="text-gray-700 font-medium mb-2 block">Your Name (Optional):</label>
+                <input type="text" id="name" name="name" placeholder="John Doe" class="w-full">
+            </div>
+            <div>
+                <label for="email" class="text-gray-700 font-medium mb-2 block">Your Email (Optional):</label>
+                <input type="email" id="email" name="email" placeholder="john.doe@example.com" class="w-full">
+            </div>
+            <div>
+                <label for="subject" class="text-gray-700 font-medium mb-2 block">Subject:</label>
+                <input type="text" id="subject" name="subject" placeholder="Bug Report, Feature Suggestion, General Inquiry" class="w-full" required>
+            </div>
+            <div>
+                <label for="message" class="text-gray-700 font-medium mb-2 block">Your Message:</label>
+                <textarea id="message" name="message" rows="6" placeholder="Describe your feedback or issue here..." class="w-full" required></textarea>
+            </div>
+            <button type="submit" class="w-full py-3 px-4 text-lg bg-green-600 hover:bg-green-700 focus:ring-green-500">
+                Send Feedback
+            </button>
+        </form>
+
+        <!-- Loading Indicator for Feedback -->
+        <div id="feedbackLoadingIndicator" class="loading-indicator">
+            <svg class="animate-spin h-5 w-5 mr-3 inline-block text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span id="feedbackLoadingMessage">Sending feedback...</span>
+        </div>
+    </main>
+
+    <script>
+        const API_BASE_URL = 'https://ai-web-toolkit-app.onrender.com'; // IMPORTANT: Replace with your actual Render.com app URL
+        const messageBox = document.getElementById('messageBox');
+        const errorBox = document.getElementById('errorBox');
+        const feedbackForm = document.getElementById('feedbackForm');
+        const feedbackLoadingIndicator = document.getElementById('feedbackLoadingIndicator');
+        const feedbackLoadingMessageSpan = document.getElementById('feedbackLoadingMessage');
+
+        function showMessage(msg, type = 'info') {
+            const targetBox = type === 'error' ? errorBox : messageBox;
+            const otherBox = type === 'error' ? messageBox : errorBox;
+
+            targetBox.textContent = msg;
+            targetBox.style.display = 'block';
+            otherBox.style.display = 'none';
+
+            setTimeout(() => {
+                targetBox.style.display = 'none';
+            }, 5000);
+        }
+
+        function setFeedbackLoading(isLoading, message = 'Processing...') {
+            const submitButton = feedbackForm.querySelector('button[type="submit"]');
+            if (isLoading) {
+                feedbackLoadingIndicator.classList.remove('hidden');
+                feedbackLoadingMessageSpan.textContent = message;
+                submitButton.disabled = true;
+                Array.from(feedbackForm.elements).forEach(element => {
+                    if (element.tagName !== 'BUTTON') element.disabled = true;
+                });
+            } else {
+                feedbackLoadingIndicator.classList.add('hidden');
+                submitButton.disabled = false;
+                Array.from(feedbackForm.elements).forEach(element => {
+                    if (element.tagName !== 'BUTTON') element.disabled = false;
+                });
+            }
+        }
+
+        feedbackForm.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+
+            if (!subject || !message) {
+                showMessage('Please fill in the subject and message fields.', 'warning');
+                return;
+            }
+
+            setFeedbackLoading(true, 'Sending your feedback...');
+
+            // Simulate sending feedback (since email integration is removed)
+            // In a real scenario, you might send this to a database, a different API, etc.
+            try {
+                // Simulate network delay
+                await new Promise(resolve => setTimeout(resolve, 1500)); 
+                
+                // Here, you would typically send data to a backend endpoint if you had a different feedback storage mechanism
+                // For now, we just simulate success.
+
+                showMessage('Thank you for your feedback! It has been received.', 'info');
+                feedbackForm.reset(); // Clear the form
+            } catch (error) {
+                console.error('Feedback submission failed:', error);
+                showMessage('Failed to send feedback. Please try again later.', 'error');
+            } finally {
+                setFeedbackLoading(false);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -3,855 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Powered Web Toolkit</title>
+    <title>AI Powered Web Toolkit - Home</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom styles for the app */
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f3f4f6; /* Light gray background */
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
             min-height: 100vh;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             box-sizing: border-box;
         }
-        .container {
-            background-color: #ffffff;
-            border-radius: 12px; /* More rounded corners */
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Softer shadow */
-            padding: 32px;
-            width: 100%;
-            max-width: 800px; /* Increased max-width for dual pages */
+        .header-nav {
+            background-color: #1a202c; /* Dark background for header */
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .header-nav a {
+            color: #e2e8f0; /* Light text for links */
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .header-nav a:hover {
+            background-color: #2d3748; /* Slightly lighter dark on hover */
+            color: #ffffff;
+        }
+        .header-nav a.active {
+            background-color: #6366f1; /* Indigo for active link */
+            color: white;
+        }
+        .content-section {
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+            background-color: #ffffff;
+            margin: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
-        textarea {
-            min-height: 150px;
-            resize: vertical;
+        .feature-card {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%; /* Ensure cards fill grid space */
         }
-        select, button, textarea, input[type="range"], input[type="text"], input[type="number"] {
-            border: 1px solid #d1d5db; /* Light gray border */
-            padding: 12px;
-            border-radius: 8px; /* Slightly rounded for inputs */
-            font-size: 1rem;
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+        .feature-image {
+            width: 100%;
+            height: 180px; /* Fixed height for images */
+            object-fit: cover; /* Cover the area */
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .feature-content {
+            padding: 1.5rem;
+            flex-grow: 1; /* Allow content to expand */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .feature-content h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
             color: #374151;
-            outline: none;
-            transition: border-color 0.2s;
+            margin-bottom: 0.75rem;
         }
-        select:focus, textarea:focus, input[type="range"]:focus, input[type="text"]:focus, input[type="number"]:focus {
-            border-color: #6366f1; /* Indigo focus color */
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-        }
-        button {
-            background-color: #6366f1; /* Indigo button */
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-        }
-        button:hover {
-            background-color: #4f46e5; /* Darker indigo on hover */
-            transform: translateY(-1px);
-        }
-        button:active {
-            transform: translateY(0);
-        }
-        .message-box {
-            background-color: #ffeeba; /* Light yellow for warnings */
-            border: 1px solid #ffde7b;
-            color: #856404;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            display: none; /* Hidden by default */
-        }
-        .error-box {
-            background-color: #f8d7da; /* Light red for errors */
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            display: none; /* Hidden by default */
-        }
-        /* Custom styling for range input track */
-        input[type="range"]::-webkit-slider-runnable-track {
-            background: #e0e0e0;
-            height: 8px;
-            border-radius: 4px;
-        }
-        input[type="range"]::-moz-range-track {
-            background: #e0e0e0;
-            height: 8px;
-            border-radius: 4px;
-        }
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            height: 20px;
-            width: 20px;
-            border-radius: 50%;
-            background: #6366f1;
-            cursor: pointer;
-            margin-top: -6px; /* Adjust thumb position */
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-        }
-        input[type="range"]::-moz-range-thumb {
-            height: 20px;
-            width: 20px;
-            border-radius: 50%;
-            background: #6366f1;
-            cursor: pointer;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-        }
-
-        /* Styles for navigation/tabs */
-        .tab-button {
-            padding: 10px 20px;
-            border-radius: 8px;
-            background-color: #e0e7ff; /* Light indigo */
-            color: #4f46e5;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .tab-button.active {
-            background-color: #6366f1; /* Darker indigo for active tab */
-            color: white;
-        }
-        .tab-button:hover:not(.active) {
-            background-color: #c7d2fe; /* Lighter indigo on hover for inactive */
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        .output-box {
-            background-color: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 16px;
-            min-height: 100px;
-            white-space: pre-wrap; /* Preserve whitespace and wrap text */
-            word-wrap: break-word; /* Break long words */
-            color: #374151;
-            font-size: 1rem;
+        .feature-content p {
+            color: #6b7280;
+            font-size: 0.95rem;
             line-height: 1.5;
-            overflow-y: auto; /* Enable scrolling for long content */
-            max-height: 400px; /* Limit height for scrollability */
+            margin-bottom: 1rem;
+            flex-grow: 1; /* Allow description to take space */
         }
-        #coverImageOutput img {
-            max-width: 100%;
-            height: auto;
+        .feature-content .cta-button {
+            background-color: #6366f1;
+            color: white;
+            padding: 0.75rem 1.5rem;
             border-radius: 8px;
-            margin-top: 15px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            text-decoration: none; /* Remove underline for links */
+            display: inline-block; /* Ensure padding works */
+            width: fit-content; /* Adjust button width to content */
+            margin: 0 auto; /* Center the button */
+        }
+        .feature-content .cta-button:hover {
+            background-color: #4f46e5;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            width: 100%;
+            margin-top: 2rem;
+        }
+        @media (max-width: 768px) {
+            .header-nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .header-nav a {
+                width: 100%;
+                text-align: center;
+            }
+            .grid-container {
+                grid-template-columns: 1fr; /* Stack cards on small screens */
+            }
         }
     </style>
+    <!-- Google AdSense Code -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7621618027309121"
+     crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="container">
-        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">AI Powered Web Toolkit</h1>
-
-        <!-- Navigation Tabs -->
-        <nav class="flex justify-center space-x-4 mb-6 flex-wrap">
-            <button id="ttsTabButton" class="tab-button active">Text-to-Speech</button>
-            <button id="humanizerTabButton" class="tab-button">Text Humanizer</button>
-            <button id="bookWriterTabButton" class="tab-button">AI Book Writer</button>
-            <button id="coverGeneratorTabButton" class="tab-button">AI Book Cover</button>
+    <header class="header-nav">
+        <div class="text-2xl font-bold text-white">AI Toolkit</div>
+        <nav class="flex space-x-4 flex-wrap justify-center">
+            <a href="index.html" class="active">Home</a>
+            <a href="tts.html">Text-to-Speech</a>
+            <a href="humanizer.html">Text Humanizer</a>
+            <a href="book_writer.html">AI Book Writer</a>
+            <a href="cover_generator.html">AI Book Cover</a>
+            <a href="feedback.html">Feedback</a>
         </nav>
+    </header>
 
-        <!-- Message/Error Boxes (global for all sections) -->
-        <div id="messageBox" class="message-box"></div>
-        <div id="errorBox" class="error-box"></div>
+    <main class="content-section">
+        <h1 class="text-4xl font-extrabold text-gray-900 mb-6">Welcome to Your AI Powered Web Toolkit!</h1>
+        <p class="text-lg text-gray-700 mb-8 max-w-2xl">
+            Unleash the power of artificial intelligence with our suite of intuitive tools. From transforming text into lifelike speech to crafting compelling narratives and generating stunning visuals, your creativity knows no bounds.
+        </p>
 
-        <!-- Text-to-Speech Section -->
-        <div id="ttsSection" class="tab-content active">
-            <h2 class="text-2xl font-semibold text-gray-700 mb-4">Text-to-Speech Converter</h2>
-
-            <div class="flex flex-col">
-                <label for="textInput" class="text-gray-700 font-medium mb-2">Enter Text:</label>
-                <textarea id="textInput" placeholder="Type or paste your text here..." class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"></textarea>
+        <div class="grid-container">
+            <!-- Text-to-Speech Card -->
+            <div class="feature-card" onclick="location.href='tts.html'">
+                <img src="https://placehold.co/600x300/A0B9D9/FFFFFF?text=Text-to-Speech" alt="Text-to-Speech" class="feature-image">
+                <div class="feature-content">
+                    <h3>Text-to-Speech Converter</h3>
+                    <p>Transform any written text into natural-sounding audio with a variety of voices and customizable parameters like pitch and speed.</p>
+                    <a href="tts.html" class="cta-button">Try Now</a>
+                </div>
             </div>
 
-            <div class="flex flex-col">
-                <label for="voiceSelect" class="text-gray-700 font-medium mb-2">Select Voice:</label>
-                <select id="voiceSelect" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                    <!-- Voices will be populated here by JavaScript -->
-                    <option value="" disabled selected>Loading voices...</option>
-                </select>
+            <!-- Text Humanizer Card -->
+            <div class="feature-card" onclick="location.href='humanizer.html'">
+                <img src="https://placehold.co/600x300/C0D9A0/FFFFFF?text=Text+Humanizer" alt="Text Humanizer" class="feature-image">
+                <div class="feature-content">
+                    <h3>AI Text Humanizer</h3>
+                    <p>Make your AI-generated or formal text sound authentically human, improving readability and engagement for any audience.</p>
+                    <a href="humanizer.html" class="cta-button">Humanize Text</a>
+                </div>
             </div>
 
-            <div class="flex flex-col">
-                <label for="pitchControl" class="text-gray-700 font-medium mb-2">Pitch: <span id="pitchValue">0.0</span></label>
-                <input type="range" id="pitchControl" min="-20" max="20" value="0" step="1" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+            <!-- AI Book Writer Card -->
+            <div class="feature-card" onclick="location.href='book_writer.html'">
+                <img src="https://placehold.co/600x300/D9A0B9/FFFFFF?text=AI+Book+Writer" alt="AI Book Writer" class="feature-image">
+                <div class="feature-content">
+                    <h3>AI Book Writer</h3>
+                    <p>Generate full-length books chapter by chapter on any topic, with customizable word limits and book types, powered by advanced AI.</p>
+                    <a href="book_writer.html" class="cta-button">Start Writing</a>
+                </div>
             </div>
 
-            <div class="flex flex-col">
-                <label for="speedControl" class="text-gray-700 font-medium mb-2">Speed: <span id="speedValue">1.0</span></label>
-                <input type="range" id="speedControl" min="0.25" max="4" value="1" step="0.05" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+            <!-- AI Book Cover Generator Card -->
+            <div class="feature-card" onclick="location.href='cover_generator.html'">
+                <img src="https://placehold.co/600x300/B9D9A0/FFFFFF?text=AI+Book+Cover" alt="AI Book Cover Generator" class="feature-image">
+                <div class="feature-content">
+                    <h3>AI Book Cover Generator</h3>
+                    <p>Create unique and eye-catching book covers from simple text prompts, bringing your literary visions to life visually.</p>
+                    <a href="cover_generator.html" class="cta-button">Generate Cover</a>
+                </div>
             </div>
 
-            <div class="flex flex-col sm:flex-row gap-4">
-                <button id="speakButton" class="flex-1 py-3 px-4 text-lg">
-                    Speak
-                </button>
-                <button id="downloadButton" class="flex-1 py-3 px-4 text-lg bg-green-500 hover:bg-green-600 focus:ring-green-500">
-                    Download Audio
-                </button>
-            </div>
-             <!-- Loading Indicator for TTS -->
-            <div id="ttsLoadingIndicator" class="hidden text-center text-gray-600 font-medium mt-4">
-                <svg class="animate-spin h-5 w-5 mr-3 inline-block text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <span id="ttsLoadingMessage">Processing...</span>
-            </div>
-        </div>
-
-        <!-- Text Humanizer Section -->
-        <div id="humanizerSection" class="tab-content">
-            <h2 class="text-2xl font-semibold text-gray-700 mb-4">Text Humanizer (AI Powered)</h2>
-
-            <div class="flex flex-col">
-                <label for="humanizerTextInput" class="text-gray-700 font-medium mb-2">Enter Text to Humanize:</label>
-                <textarea id="humanizerTextInput" placeholder="Paste your AI-generated or stiff text here to make it sound 100% human." class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"></textarea>
-            </div>
-
-            <button id="humanizeButton" class="w-full py-3 px-4 text-lg bg-indigo-500 hover:bg-indigo-600 focus:ring-indigo-500">
-                Humanize Text
-            </button>
-
-            <!-- Loading Indicator for Humanizer -->
-            <div id="humanizerLoadingIndicator" class="hidden text-center text-gray-600 font-medium mt-4">
-                <svg class="animate-spin h-5 w-5 mr-3 inline-block text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <span id="humanizerLoadingMessage">Humanizing your text...</span>
-            </div>
-
-            <div class="flex flex-col">
-                <label for="humanizedOutput" class="text-gray-700 font-medium mb-2">Humanized Output:</label>
-                <div id="humanizedOutput" class="output-box"></div>
-            </div>
-        </div>
-
-        <!-- AI Book Writer Section -->
-        <div id="bookWriterSection" class="tab-content">
-            <h2 class="text-2xl font-semibold text-gray-700 mb-4">AI Book Writer (Chapter-based)</h2>
-
-            <div class="flex flex-col">
-                <label for="bookTopicInput" class="text-gray-700 font-medium mb-2">Book Topic or Title:</label>
-                <input type="text" id="bookTopicInput" placeholder="e.g., The Future of AI in Daily Life" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
-            </div>
-
-            <div class="flex flex-col">
-                <label for="bookTypeSelect" class="text-gray-700 font-medium mb-2">Type of Book:</label>
-                <select id="bookTypeSelect" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                    <option value="novel">Novel</option>
-                    <option value="non-fiction book">Non-Fiction Book</option>
-                    <option value="biography">Biography</option>
-                    <option value="encyclopedia entry">Encyclopedia Entry</option>
-                    <option value="technical guide">Technical Guide</option>
-                    <option value="fantasy story">Fantasy Story</option>
-                    <option value="science fiction story">Science Fiction Story</option>
-                    <option value="children's story">Children's Story</option>
-                    <option value="historical fiction">Historical Fiction</option>
-                    <option value="thriller">Thriller</option>
-                    <option value="educational textbook">Educational Textbook</option>
-                </select>
-            </div>
-
-            <div class="flex flex-col">
-                <label for="numChaptersInput" class="text-gray-700 font-medium mb-2">Number of Chapters (1-10):</label>
-                <input type="number" id="numChaptersInput" min="1" max="10" value="5" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
-            </div>
-
-            <div class="flex flex-col">
-                <label for="wordLimitInput" class="text-gray-700 font-medium mb-2">Desired Total Word Limit (max 50,000):</label>
-                <input type="number" id="wordLimitInput" min="500" max="50000" value="5000" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
-                <p class="text-sm text-gray-500 mt-1">Note: Actual length may vary. Longer books take significantly more time.</p>
-            </div>
-
-            <button id="generateBookButton" class="w-full py-3 px-4 text-lg bg-purple-600 hover:bg-purple-700 focus:ring-purple-500">
-                Generate Book
-            </button>
-            <button id="downloadBookButton" class="w-full py-3 px-4 text-lg bg-teal-600 hover:bg-teal-700 focus:ring-teal-500 mt-2">
-                Download Book (.txt)
-            </button>
-
-            <!-- Loading Indicator for Book Writer -->
-            <div id="bookWriterLoadingIndicator" class="hidden text-center text-gray-600 font-medium mt-4">
-                <svg class="animate-spin h-5 w-5 mr-3 inline-block text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <span id="bookWriterLoadingMessage">Generating book outline...</span>
-            </div>
-
-            <div class="flex flex-col">
-                <label for="bookOutput" class="text-gray-700 font-medium mb-2">Generated Book Content:</label>
-                <div id="bookOutput" class="output-box"></div>
-            </div>
-        </div>
-
-        <!-- AI Book Cover Generator Section -->
-        <div id="coverGeneratorSection" class="tab-content">
-            <h2 class="text-2xl font-semibold text-gray-700 mb-4">AI Book Cover Generator</h2>
-
-            <div class="flex flex-col">
-                <label for="coverPromptInput" class="text-gray-700 font-medium mb-2">Book Title / Cover Description:</label>
-                <input type="text" id="coverPromptInput" placeholder="e.g., A fantasy landscape with a dragon and a wizard" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
-            </div>
-
-            <button id="generateCoverButton" class="w-full py-3 px-4 text-lg bg-blue-600 hover:bg-blue-700 focus:ring-blue-500">
-                Generate Cover
-            </button>
-            <button id="downloadCoverButton" class="w-full py-3 px-4 text-lg bg-sky-600 hover:bg-sky-700 focus:ring-sky-500 mt-2">
-                Download Cover
-            </button>
-
-            <!-- Loading Indicator for Cover Generator -->
-            <div id="coverLoadingIndicator" class="hidden text-center text-gray-600 font-medium mt-4">
-                <svg class="animate-spin h-5 w-5 mr-3 inline-block text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <span id="coverLoadingMessage">Generating book cover...</span>
-            </div>
-
-            <div class="flex flex-col">
-                <label class="text-gray-700 font-medium mb-2">Generated Cover Image:</label>
-                <div id="coverImageOutput" class="output-box flex justify-center items-center">
-                    <p class="text-gray-400">Your generated cover will appear here.</p>
+            <!-- Feedback Portal Card -->
+            <div class="feature-card" onclick="location.href='feedback.html'">
+                <img src="https://placehold.co/600x300/A0D9D9/FFFFFF?text=Feedback+Portal" alt="Feedback Portal" class="feature-image">
+                <div class="feature-content">
+                    <h3>Feedback Portal</h3>
+                    <p>Share your thoughts, suggestions, or report issues to help us improve this toolkit. Your feedback is highly valued!</p>
+                    <a href="feedback.html" class="cta-button">Give Feedback</a>
                 </div>
             </div>
         </div>
 
-    </div>
-
-    <script>
-        // --- Global DOM Element References (for all sections) ---
-        const messageBox = document.getElementById('messageBox');
-        const errorBox = document.getElementById('errorBox');
-        const API_BASE_URL = 'http://127.0.0.1:5000'; // Your Flask backend URL
-
-        // --- Navigation Elements ---
-        const ttsTabButton = document.getElementById('ttsTabButton');
-        const humanizerTabButton = document.getElementById('humanizerTabButton');
-        const bookWriterTabButton = document.getElementById('bookWriterTabButton');
-        const coverGeneratorTabButton = document.getElementById('coverGeneratorTabButton');
-
-        const ttsSection = document.getElementById('ttsSection');
-        const humanizerSection = document.getElementById('humanizerSection');
-        const bookWriterSection = document.getElementById('bookWriterSection');
-        const coverGeneratorSection = document.getElementById('coverGeneratorSection');
-
-        // --- Text-to-Speech Section Elements ---
-        const textInput = document.getElementById('textInput');
-        const voiceSelect = document.getElementById('voiceSelect');
-        const speakButton = document.getElementById('speakButton');
-        const downloadButton = document.getElementById('downloadButton');
-        const pitchControl = document.getElementById('pitchControl');
-        const pitchValueSpan = document.getElementById('pitchValue');
-        const speedControl = document.getElementById('speedControl');
-        const speedValueSpan = document.getElementById('speedValue');
-        const ttsLoadingIndicator = document.getElementById('ttsLoadingIndicator');
-        const ttsLoadingMessageSpan = document.getElementById('ttsLoadingMessage');
-
-        // --- Text Humanizer Section Elements ---
-        const humanizerTextInput = document.getElementById('humanizerTextInput');
-        const humanizeButton = document.getElementById('humanizeButton');
-        const humanizedOutput = document.getElementById('humanizedOutput');
-        const humanizerLoadingIndicator = document.getElementById('humanizerLoadingIndicator');
-        const humanizerLoadingMessageSpan = document.getElementById('humanizerLoadingMessage');
-
-        // --- AI Book Writer Section Elements ---
-        const bookTopicInput = document.getElementById('bookTopicInput');
-        const bookTypeSelect = document.getElementById('bookTypeSelect'); 
-        const numChaptersInput = document.getElementById('numChaptersInput'); 
-        const wordLimitInput = document.getElementById('wordLimitInput');
-        const generateBookButton = document.getElementById('generateBookButton');
-        const downloadBookButton = document.getElementById('downloadBookButton');
-        const bookOutput = document.getElementById('bookOutput');
-        const bookWriterLoadingIndicator = document.getElementById('bookWriterLoadingIndicator');
-        const bookWriterLoadingMessageSpan = document.getElementById('bookWriterLoadingMessage');
-
-        // --- AI Book Cover Generator Section Elements ---
-        const coverPromptInput = document.getElementById('coverPromptInput');
-        const generateCoverButton = document.getElementById('generateCoverButton');
-        const downloadCoverButton = document.getElementById('downloadCoverButton');
-        const coverImageOutput = document.getElementById('coverImageOutput');
-        const coverLoadingIndicator = document.getElementById('coverLoadingIndicator');
-        const coverLoadingMessageSpan = document.getElementById('coverLoadingMessage');
-
-        // --- Helper Functions (Shared) ---
-
-        function showMessage(msg, type = 'info') {
-            const targetBox = type === 'error' ? errorBox : messageBox;
-            const otherBox = type === 'error' ? messageBox : errorBox;
-
-            targetBox.textContent = msg;
-            targetBox.style.display = 'block';
-            otherBox.style.display = 'none';
-
-            // Hide after a few seconds
-            setTimeout(() => {
-                targetBox.style.display = 'none';
-            }, 5000);
-        }
-
-        // --- Tab Switching Logic ---
-        function showTab(tabId) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(section => {
-                section.classList.remove('active');
-            });
-            // Deactivate all tab buttons
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.classList.remove('active');
-            });
-
-            // Show the selected tab content
-            document.getElementById(tabId).classList.add('active');
-            // Activate the corresponding button
-            document.getElementById(tabId.replace('Section', 'TabButton')).classList.add('active');
-
-            // Special initializations based on tab
-            if (tabId === 'ttsSection' && voiceSelect.options.length <= 1) { 
-                 fetchVoices(); // Re-fetch voices if not already populated for TTS
-            }
-            if (tabId === 'coverGeneratorSection') {
-                // Pre-fill cover prompt with book topic if available from book writer tab
-                if (bookTopicInput.value.trim() !== "") {
-                    coverPromptInput.value = `Book cover for: ${bookTopicInput.value.trim()}`;
-                }
-            }
-        }
-
-        // --- Text-to-Speech Functions ---
-        function setTtsLoading(isLoading, message = 'Processing...') {
-            if (isLoading) {
-                ttsLoadingIndicator.classList.remove('hidden');
-                ttsLoadingMessageSpan.textContent = message;
-                speakButton.disabled = true;
-                downloadButton.disabled = true;
-                textInput.disabled = true;
-                voiceSelect.disabled = true;
-                pitchControl.disabled = true;
-                speedControl.disabled = true;
-            } else {
-                ttsLoadingIndicator.classList.add('hidden');
-                speakButton.disabled = false;
-                downloadButton.disabled = false;
-                textInput.disabled = false;
-                voiceSelect.disabled = false;
-                pitchControl.disabled = false;
-                speedControl.disabled = false;
-            }
-        }
-
-        async function fetchVoices() {
-            setTtsLoading(true, 'Loading voices from Murf AI...');
-            try {
-                const response = await fetch(`${API_BASE_URL}/voices`);
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(`HTTP error! status: ${response.status} - ${errorData.details || response.statusText}`);
-                }
-                const voices = await response.json();
-                populateVoiceList(voices);
-                showMessage('Voices loaded successfully!', 'info');
-            } catch (error) {
-                console.error('Error fetching voices:', error);
-                showMessage(`Failed to load voices: ${error.message}. Make sure your backend server is running and Murf AI API key is correct.`, 'error');
-                voiceSelect.innerHTML = '<option value="" disabled selected>Error loading voices</option>';
-            } finally {
-                setTtsLoading(false);
-            }
-        }
-
-        function populateVoiceList(voices) {
-            voiceSelect.innerHTML = ''; // Clear existing options
-            if (voices.length > 0) {
-                voices.forEach((voice) => {
-                    const option = document.createElement('option');
-                    option.textContent = `${voice.name}`; 
-                    option.value = voice.id; 
-                    voiceSelect.appendChild(option);
-                });
-                if (voiceSelect.options.length > 0) {
-                    voiceSelect.selectedIndex = 0;
-                }
-            } else {
-                voiceSelect.innerHTML = '<option value="" disabled selected>No voices available</option>';
-                showMessage('No voices found. Check your Murf AI setup or the hardcoded voice list in backend.', 'error');
-            }
-        }
-
-        async function synthesizeSpeech(action) {
-            const textToSpeak = textInput.value.trim();
-            const selectedVoiceId = voiceSelect.value;
-            const pitch = parseFloat(pitchControl.value);
-            const speed = parseFloat(speedControl.value);
-
-            if (textToSpeak === '') {
-                showMessage('Please enter some text to speak or download.', 'warning');
-                return;
-            }
-            if (!selectedVoiceId) {
-                showMessage('Please select a voice.', 'warning');
-                return;
-            }
-
-            setTtsLoading(true, action === 'play' ? 'Speaking...' : 'Generating audio for download...');
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/synthesize`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        text: textToSpeak,
-                        voiceId: selectedVoiceId,
-                        pitch: pitch,
-                        speed: speed,
-                        action: action
-                    })
-                });
-
-                if (!response.ok) {
-                    const errorBody = await response.json().catch(() => ({}));
-                    throw new Error(`HTTP error! status: ${response.status} - ${errorBody.details || response.statusText}`);
-                }
-
-                if (action === 'play') {
-                    const audioBlob = await response.blob();
-                    const audioUrl = URL.createObjectURL(audioBlob);
-                    const audio = new Audio(audioUrl);
-                    audio.play();
-                    audio.onended = () => {
-                        URL.revokeObjectURL(audioUrl);
-                        setTtsLoading(false);
-                    };
-                    audio.onerror = (e) => {
-                        console.error('Audio playback error:', e);
-                        showMessage('Failed to play audio. Try another voice or text.', 'error');
-                        setTtsLoading(false);
-                    };
-                } else { // action === 'download'
-                    const blob = await response.blob();
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.style.display = 'none';
-                    a.href = url;
-                    a.download = 'converted_audio.mp3';
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(url);
-                    document.body.removeChild(a);
-                    showMessage('Audio downloaded successfully!', 'info');
-                    setTtsLoading(false);
-                }
-
-            } catch (error) {
-                console.error('Synthesis request failed:', error);
-                showMessage(`Error: ${error.message}. Check console for details.`, 'error');
-                setTtsLoading(false);
-            }
-        }
-
-        // --- Text Humanizer Functions ---
-        function setHumanizerLoading(isLoading, message = 'Processing...') {
-            if (isLoading) {
-                humanizerLoadingIndicator.classList.remove('hidden');
-                humanizerLoadingMessageSpan.textContent = message;
-                humanizeButton.disabled = true;
-                humanizerTextInput.disabled = true;
-                humanizedOutput.textContent = ''; // Clear previous output
-            } else {
-                humanizerLoadingIndicator.classList.add('hidden');
-                humanizeButton.disabled = false;
-                humanizerTextInput.disabled = false;
-            }
-        }
-
-        async function humanizeText() {
-            const textToHumanize = humanizerTextInput.value.trim();
-
-            if (textToHumanize === '') {
-                showMessage('Please enter some text to humanize.', 'warning');
-                return;
-            }
-
-            setHumanizerLoading(true, 'Humanizing your text...');
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/humanize_text`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        text: textToHumanize
-                    })
-                });
-
-                if (!response.ok) {
-                    const errorBody = await response.json().catch(() => ({}));
-                    throw new Error(`HTTP error! status: ${response.status} - ${errorBody.details || response.statusText}`);
-                }
-
-                const result = await response.json();
-                if (result.humanizedText) {
-                    humanizedOutput.textContent = result.humanizedText;
-                    showMessage('Text humanized successfully!', 'info');
-                } else {
-                    showMessage('Humanization failed: No text returned.', 'error');
-                }
-
-            } catch (error) {
-                console.error('Humanization request failed:', error);
-                showMessage(`Error: ${error.message}. Check console for details.`, 'error');
-            } finally {
-                setHumanizerLoading(false);
-            }
-        }
-
-        // --- AI Book Writer Functions ---
-        let generatedBookContent = ""; // Store for download
-
-        function setBookWriterLoading(isLoading, message = 'Processing...') {
-            if (isLoading) {
-                bookWriterLoadingIndicator.classList.remove('hidden');
-                bookWriterLoadingMessageSpan.textContent = message;
-                generateBookButton.disabled = true;
-                downloadBookButton.disabled = true;
-                bookTopicInput.disabled = true;
-                bookTypeSelect.disabled = true; 
-                numChaptersInput.disabled = true; 
-                wordLimitInput.disabled = true;
-                bookOutput.textContent = ''; // Clear previous output
-                generatedBookContent = "";
-            } else {
-                bookWriterLoadingIndicator.classList.add('hidden');
-                generateBookButton.disabled = false;
-                downloadBookButton.disabled = (generatedBookContent === ""); // Only enable download if content exists
-                bookTopicInput.disabled = false;
-                bookTypeSelect.disabled = false; 
-                numChaptersInput.disabled = false; 
-                wordLimitInput.disabled = false;
-            }
-        }
-
-        async function generateBook() {
-            const topic = bookTopicInput.value.trim();
-            const wordLimit = parseInt(wordLimitInput.value, 10);
-            const numChapters = parseInt(numChaptersInput.value, 10); 
-            const bookType = bookTypeSelect.value; 
-
-            if (!topic) {
-                showMessage('Please enter a book topic or title.', 'warning');
-                return;
-            }
-            if (isNaN(wordLimit) || wordLimit <= 0) {
-                showMessage('Please enter a valid word limit (min 500).', 'warning');
-                return;
-            }
-            if (wordLimit > 50000) {
-                showMessage('Word limit cannot exceed 50,000 words. Adjusting to 50,000.', 'warning');
-                wordLimitInput.value = 50000; // Correct the input value
-            }
-            if (isNaN(numChapters) || numChapters < 1 || numChapters > 10) { 
-                showMessage('Please enter a valid number of chapters between 1 and 10.', 'warning');
-                return;
-            }
-
-            setBookWriterLoading(true, 'Generating book outline and content...');
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/generate_book`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        topic: topic,
-                        word_limit: wordLimit,
-                        num_chapters: numChapters,
-                        book_type: bookType
-                    })
-                });
-
-                if (!response.ok) {
-                    const errorBody = await response.json().catch(() => ({}));
-                    throw new Error(`HTTP error! status: ${response.status} - ${errorBody.details || response.statusText}`);
-                }
-
-                const result = await response.json();
-                if (result.bookContent) {
-                    generatedBookContent = result.bookContent;
-                    bookOutput.textContent = generatedBookContent;
-                    showMessage(`Book generated successfully! Total words: ${result.wordCount}`, 'info');
-                } else {
-                    showMessage('Book generation failed: No content returned.', 'error');
-                }
-
-            } catch (error) {
-                console.error('Book generation request failed:', error);
-                showMessage(`Error: ${error.message}. Book generation can take time and might be limited by AI model capabilities.`, 'error');
-            } finally {
-                setBookWriterLoading(false);
-            }
-        }
-
-        function downloadBook() {
-            if (generatedBookContent) {
-                const blob = new Blob([generatedBookContent], { type: 'text/plain;charset=utf-8' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `${bookTopicInput.value.trim().replace(/[^a-z0-9\s]/gi, '').substring(0, 50).trim() || 'generated_book'}.txt`; // Sanitize and trim filename
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                showMessage('Book downloaded successfully!', 'info');
-            } else {
-                showMessage('No book content to download.', 'warning');
-            }
-        }
-
-        // --- AI Book Cover Generator Functions ---
-        let generatedCoverImageUrl = ""; // Store the URL for display and download
-
-        function setCoverLoading(isLoading, message = 'Processing...') {
-            if (isLoading) {
-                coverLoadingIndicator.classList.remove('hidden');
-                coverLoadingMessageSpan.textContent = message;
-                generateCoverButton.disabled = true;
-                downloadCoverButton.disabled = true;
-                coverPromptInput.disabled = true;
-                coverImageOutput.innerHTML = '<p class="text-gray-400">Generating your cover...</p>'; // Clear previous image
-                generatedCoverImageUrl = ""; // Reset stored URL
-            } else {
-                coverLoadingIndicator.classList.add('hidden');
-                generateCoverButton.disabled = false;
-                downloadCoverButton.disabled = (generatedCoverImageUrl === ""); // Only enable download if URL exists
-                coverPromptInput.disabled = false;
-            }
-        }
-
-        async function generateCover() {
-            const prompt = coverPromptInput.value.trim();
-
-            if (!prompt) {
-                showMessage('Please enter a prompt for the book cover.', 'warning');
-                return;
-            }
-
-            setCoverLoading(true, 'Sending request to image AI...');
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/generate_cover`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        prompt: prompt
-                    })
-                });
-
-                if (!response.ok) {
-                    const errorBody = await response.json().catch(() => ({}));
-                    throw new Error(`HTTP error! status: ${response.status} - ${errorBody.details || response.statusText}`);
-                }
-
-                const result = await response.json();
-                if (result.imageUrl) { // Expecting 'imageUrl' now
-                    generatedCoverImageUrl = result.imageUrl;
-                    const img = document.createElement('img');
-                    img.src = generatedCoverImageUrl; // Use the direct URL
-                    img.alt = "Generated Book Cover";
-                    coverImageOutput.innerHTML = ''; 
-                    coverImageOutput.appendChild(img);
-                    showMessage('Book cover generated successfully!', 'info');
-                } else {
-                    showMessage('Cover generation failed: No image URL returned.', 'error');
-                }
-
-            } catch (error) {
-                console.error('Cover generation request failed:', error);
-                showMessage(`Error: ${error.message}. Cover generation can take time and might fail for complex prompts.`, 'error');
-            } finally {
-                setCoverLoading(false);
-            }
-        }
-
-        function downloadCover() {
-            if (generatedCoverImageUrl) {
-                const link = document.createElement('a');
-                link.href = generatedCoverImageUrl; // Use the direct URL
-                // Suggest a filename, but the actual download might use the server's filename if Content-Disposition is set
-                link.download = `${coverPromptInput.value.trim().substring(0, 50).replace(/[^a-z0-9]/gi, '_') || 'book_cover'}.png`; 
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                showMessage('Cover downloaded successfully!', 'info');
-            } else {
-                showMessage('No cover image to download.', 'warning');
-            }
-        }
-
-
-        // --- Event Listeners (Navigation) ---
-        ttsTabButton.addEventListener('click', () => showTab('ttsSection'));
-        humanizerTabButton.addEventListener('click', () => showTab('humanizerSection'));
-        bookWriterTabButton.addEventListener('click', () => showTab('bookWriterSection'));
-        coverGeneratorTabButton.addEventListener('click', () => showTab('coverGeneratorSection'));
-
-        // --- Event Listeners (TTS) ---
-        speakButton.addEventListener('click', () => synthesizeSpeech('play'));
-        downloadButton.addEventListener('click', () => synthesizeSpeech('download'));
-        pitchControl.addEventListener('input', () => { pitchValueSpan.textContent = pitchControl.value; });
-        speedControl.addEventListener('input', () => { speedValueSpan.textContent = speedControl.value; });
-
-        // --- Event Listeners (Humanizer) ---
-        humanizeButton.addEventListener('click', humanizeText);
-
-        // --- Event Listeners (Book Writer) ---
-        generateBookButton.addEventListener('click', generateBook);
-        downloadBookButton.addEventListener('click', downloadBook);
-
-        // --- Event Listeners (Cover Generator) ---
-        generateCoverButton.addEventListener('click', generateCover);
-        downloadCoverButton.addEventListener('click', downloadCover);
-
-
-        // --- Initial Load ---
-        document.addEventListener('DOMContentLoaded', () => {
-            // Show the TTS tab by default on load
-            showTab('ttsSection'); 
-            
-            // Initialize slider values for TTS (only if TTS tab is active)
-            if (ttsSection.classList.contains('active')) {
-                pitchValueSpan.textContent = pitchControl.value;
-                speedValueSpan.textContent = speedControl.value;
-            }
-        });
-
-    </script>
+        <!-- AdSense Ad Unit (Example Placement) -->
+        <div class="my-8 text-center w-full max-w-2xl">
+            <!-- landing_page_unit -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-7621618027309121"
+                 data-ad-slot="9123243131"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </main>
 </body>
 </html>
